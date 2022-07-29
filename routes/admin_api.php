@@ -18,11 +18,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['namespace'=>'User'], function() {
+Route::group(['namespace'=>'Admin'], function() {
 
     Route::controller(HomeController::class)->group(function () {
         Route::get('/', 'index')->name('dashboard');
     });
 
-   
+    Route::group(['namespace'=>'Auth'], function() {
+        Route::controller(RegisterController::class)->group(function () {
+            Route::post('register', 'register')->name('register');
+        });
+        Route::controller(LoginController::class)->group(function () {
+            Route::post('login', 'login')->name('login');
+            Route::middleware('auth:sanctum')->match(['GET', 'POST'],'logout', 'logout')->name('logout');
+        });
+    });
 });
